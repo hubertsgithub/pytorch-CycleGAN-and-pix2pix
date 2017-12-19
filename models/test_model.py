@@ -20,7 +20,7 @@ class TestModel(BaseModel):
                                       opt.init_type,
                                       self.gpu_ids)
         which_epoch = opt.which_epoch
-        self.load_network(self.netG, 'G', which_epoch)
+        self.load_network(self.netG, 'G_B', which_epoch)
 
         print('---------- Networks initialized -------------')
         networks.print_network(self.netG)

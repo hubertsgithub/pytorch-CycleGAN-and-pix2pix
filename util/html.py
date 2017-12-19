@@ -35,6 +35,15 @@ class HTML:
         with self.t:
             with tr():
                 for im, txt, link in zip(ims, txts, links):
+                    if len(txts) == 6:  # If cyclegan. This is hacky. Just want to display relevant images.
+                        if txt in ['fake_B', 'rec_A', 'rec_B']:
+                            continue
+                        if txt == 'real_A':
+                            txt = 'Ground truth material segmentation'
+                        if txt == 'real_B':
+                            txt = 'Input rendering'
+                        if txt == 'fake_A':
+                            txt = 'Output material segmentation'
                     with td(style="word-wrap: break-word;", halign="center", valign="top"):
                         with p():
                             with a(href=os.path.join('images', link)):
