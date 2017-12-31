@@ -1,6 +1,7 @@
 import dominate
 from dominate.tags import *
 import os
+from operator import itemgetter
 
 
 class HTML:
@@ -34,7 +35,10 @@ class HTML:
         self.add_table()
         with self.t:
             with tr():
-                for im, txt, link in zip(ims, txts, links):
+                ### HACKY
+                txts = list(txts)
+                for i in range(len(txts)):
+                    txt = txts[i]
                     if len(txts) == 6:  # If cyclegan. This is hacky. Just want to display relevant images.
                         if txt in ['fake_B', 'rec_A', 'rec_B']:
                             continue
@@ -44,6 +48,26 @@ class HTML:
                             txt = 'Input rendering'
                         if txt == 'fake_A':
                             txt = 'Output material segmentation'
+                    if len(txts) == 3:  # If pix2pix. This is hacky. Just want to display relevant images.
+                        if txt == 'real_A':
+                            txt = 'Input rendering'
+                        if txt == 'fake_B':
+                            txt = 'Output material segmentation'
+                        if txt == 'real_B':
+                            txt = 'Ground truth material segmentation'
+                    txts[i] = txt
+                l = zip(ims, txts, links)
+                # This is too hacky
+                print txts
+                if 'idt_A' not in txts:
+                    l.sort(key=itemgetter(1))
+                ###
+                #for im, txt, link in zip(ims, txts, links):
+                for im, txt, link in l:
+                    ### HACKY
+                    if len(txts) == 6:  # If cyclegan. This is hacky. Just want to display relevant images.
+                        if txt in ['fake_B', 'rec_A', 'rec_B']:
+                            continue
                     with td(style="word-wrap: break-word;", halign="center", valign="top"):
                         with p():
                             with a(href=os.path.join('images', link)):
